@@ -25,7 +25,7 @@ except requests.ConnectionError:
 jsonResp = None
 
 if response.status_code == 200:
-    while (not jsonResp and getAttempts < 3):
+    while not jsonResp and getAttempts < 3:
         getAttempts += 1
         try:
             jsonResp = response.json()
@@ -34,11 +34,13 @@ if response.status_code == 200:
 
             # Log the incomplete JSON that we did get - I would like to know
             # why this would happen
-            f = open("/tmp/twcmanager-tests/getPolicy-json-"+str(getAttempts)+".txt", "w")
+            f = open(
+                "/tmp/twcmanager-tests/getPolicy-json-" + str(getAttempts) + ".txt", "w"
+            )
             f.write("Exception: " + str(e))
             f.write("API Response: " + str(response.text))
 
-        if (getAttempts == 2):
+        if getAttempts == 2:
             # Too many failures
             # Fail tests
             exit(255)
@@ -60,7 +62,9 @@ if success:
 else:
     print("At least one test failed. Please review logs")
     if skipFailure:
-        print("Due to skipFailure being set, we will not fail the test suite pipeline on this test.")
+        print(
+            "Due to skipFailure being set, we will not fail the test suite pipeline on this test."
+        )
         exit(0)
     else:
         exit(255)

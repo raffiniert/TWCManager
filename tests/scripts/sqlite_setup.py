@@ -2,13 +2,16 @@
 
 import subprocess
 
+
 def execute_query(query, database):
 
-    queryb = query.encode('utf-8')
-    process = subprocess.Popen(['sqlite3', database],
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
-                               stdin=subprocess.PIPE)
+    queryb = query.encode("utf-8")
+    process = subprocess.Popen(
+        ["sqlite3", database],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        stdin=subprocess.PIPE,
+    )
 
     stdout, _ = process.communicate(input=queryb)
 
@@ -16,7 +19,9 @@ def execute_query(query, database):
         print("Query failed: %s" % query)
         print("Output was: %s" % stdout)
 
-execute_query("""CREATE TABLE charge_sessions (
+
+execute_query(
+    """CREATE TABLE charge_sessions (
   chargeid int,
   startTime datetime,
   startkWh int,
@@ -26,18 +31,24 @@ execute_query("""CREATE TABLE charge_sessions (
   vehicleVIN varchar(17),
   primary key(startTime, slaveTWC)
 );
-""", "/etc/twcmanager/twcmanager.sqlite")
+""",
+    "/etc/twcmanager/twcmanager.sqlite",
+)
 
-execute_query("""CREATE TABLE green_energy (
+execute_query(
+    """CREATE TABLE green_energy (
   time datetime,
   genW DECIMAL(9,3),
   conW DECIMAL(9,3),
   chgW DECIMAL(9,3),
   primary key(time)
 );
-""", "/etc/twcmanager/twcmanager.sqlite")
+""",
+    "/etc/twcmanager/twcmanager.sqlite",
+)
 
-execute_query("""CREATE TABLE slave_status (
+execute_query(
+    """CREATE TABLE slave_status (
   slaveTWC varchar(4),
   time datetime,
   kWh int,
@@ -46,4 +57,6 @@ execute_query("""CREATE TABLE slave_status (
   voltsPhaseC int,
   primary key (slaveTWC, time)
 );
-""", "/etc/twcmanager/twcmanager.sqlite")
+""",
+    "/etc/twcmanager/twcmanager.sqlite",
+)

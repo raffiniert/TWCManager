@@ -14,29 +14,29 @@ import time
 # Configuration
 skipFailure = 1
 maxRequest = datetime.timedelta(seconds=2)
-dummySettings = {
-    "Voltage": 240
-}
+dummySettings = {"Voltage": 240}
 
 # Disable environment import to avoid proxying requests
 session = requests.Session()
 session.trust_env = False
 
 values = {
-  "elapsed": {},
-  "expected": {},
-  "response": {},
-  "status": {},
-  "target": {},
-  "tests": {}
+    "elapsed": {},
+    "expected": {},
+    "response": {},
+    "status": {},
+    "target": {},
+    "tests": {},
 }
+
 
 def addOffset(tag, data):
     global values
 
     try:
-        response = session.post("http://127.0.0.1:8088/api/addConsumptionOffset",
-            json=data, timeout=30)
+        response = session.post(
+            "http://127.0.0.1:8088/api/addConsumptionOffset", json=data, timeout=30
+        )
         values["elapsed"][tag] = response.elapsed
         values["response"][tag] = response.status_code
     except requests.Timeout:
@@ -46,9 +46,12 @@ def addOffset(tag, data):
         print("Error: Connection Error at %s" % tag)
         values["tests"][tag]["fail"] = 1
 
+
 def getOffsets(tag):
     try:
-        response = session.get("http://127.0.0.1:8088/api/getConsumptionOffsets", timeout=30)
+        response = session.get(
+            "http://127.0.0.1:8088/api/getConsumptionOffsets", timeout=30
+        )
         values["response"][tag] = response.status_code
     except requests.Timeout:
         print("Error: Connection Timed Out at " + tag)
@@ -66,30 +69,37 @@ def getOffsets(tag):
 
     return jsonOut
 
+
 def setSetting(setting, value):
 
-    data = {
-      "setting": setting,
-      "value": value
-    }
+    data = {"setting": setting, "value": value}
 
     try:
-        response = session.post("http://127.0.0.1:8088/api/setSetting", json=data, timeout=30)
+        response = session.post(
+            "http://127.0.0.1:8088/api/setSetting", json=data, timeout=30
+        )
         values["response"]["setSetting " + setting] = response.status_code
     except requests.Timeout:
         print("Error: Connection Timed Out at setSetting " + setting)
     except requests.ConnectionError:
         print("Error: Connection Error at setSetting " + setting)
 
+
 # Generate random offset values
-values["target"]["ampsFirst"]  = random.randint(2, 6)
+values["target"]["ampsFirst"] = random.randint(2, 6)
 values["target"]["ampsSecond"] = 0
-while (not values["target"]["ampsSecond"] or values["target"]["ampsFirst"] == values["target"]["ampsSecond"]):
+while (
+    not values["target"]["ampsSecond"]
+    or values["target"]["ampsFirst"] == values["target"]["ampsSecond"]
+):
     values["target"]["ampsSecond"] = random.randint(2, 6)
 
-values["target"]["wattsFirst"]  = random.randint(100, 500)
+values["target"]["wattsFirst"] = random.randint(100, 500)
 values["target"]["wattsSecond"] = 0
-while (not values["target"]["wattsSecond"] or values["target"]["wattsFirst"] == values["target"]["wattsSecond"]):
+while (
+    not values["target"]["wattsSecond"]
+    or values["target"]["wattsFirst"] == values["target"]["wattsSecond"]
+):
     values["target"]["wattsSecond"] = random.randint(100, 500)
 
 # Set initial Dummy module settings
@@ -99,7 +109,9 @@ setSetting("DummyModule", dummySettings)
 values["expected"]["addConNoArgs"] = 400
 values["tests"]["addConNoArgs"] = {}
 try:
-    response = session.post("http://127.0.0.1:8088/api/addConsumptionOffset", timeout=30)
+    response = session.post(
+        "http://127.0.0.1:8088/api/addConsumptionOffset", timeout=30
+    )
     values["elapsed"]["addConNoArgs"] = response.elapsed
     values["response"]["addConNoArgs"] = response.status_code
 except requests.Timeout:
@@ -121,7 +133,7 @@ values["tests"]["addConAmpsFirst"] = {}
 data = {
     "offsetName": "First Amp Offset Positive",
     "offsetValue": values["target"]["ampsFirst"],
-    "offsetUnit": "A"
+    "offsetUnit": "A",
 }
 
 addOffset("addConAmpsFirst", data)
@@ -134,7 +146,7 @@ values["tests"]["addConAmpsSecond"] = {}
 data = {
     "offsetName": "Second Amp Offset Negative",
     "offsetValue": (-1 * values["target"]["ampsSecond"]),
-    "offsetUnit": "A"
+    "offsetUnit": "A",
 }
 
 addOffset("addConAmpsSecond", data)
@@ -147,7 +159,7 @@ values["tests"]["addConWattsFirst"] = {}
 data = {
     "offsetName": "First Watt Offset Positive",
     "offsetValue": values["target"]["wattsFirst"],
-    "offsetUnit": "W"
+    "offsetUnit": "W",
 }
 
 addOffset("addConWattsFirst", data)
@@ -160,7 +172,7 @@ values["tests"]["addConWattsSecond"] = {}
 data = {
     "offsetName": "Second Watts Offset Negative",
     "offsetValue": (-1 * values["target"]["wattsSecond"]),
-    "offsetUnit": "W"
+    "offsetUnit": "W",
 }
 
 addOffset("addConWattsSecond", data)
@@ -173,7 +185,7 @@ values["tests"]["addConFloat"] = {}
 data = {
     "offsetName": "Float Value",
     "offsetValue": 1.123456789012345678901234567890,
-    "offsetUnit": "W"
+    "offsetUnit": "W",
 }
 
 addOffset("addConFloat", data)
@@ -183,11 +195,7 @@ values["status"]["addConFloat"] = getOffsets("getOffsetsFloat")
 values["expected"]["addConInvalidUnit"] = 400
 values["tests"]["addConInvalidUnit"] = {}
 
-data = {
-    "offsetName": "Offset with Invalid Unit",
-    "offsetValue": 500,
-    "offsetUnit": "Z"
-}
+data = {"offsetName": "Offset with Invalid Unit", "offsetValue": 500, "offsetUnit": "Z"}
 
 addOffset("addConInvalidUnit", data)
 values["status"]["addConInvalidUnit"] = getOffsets("getOffsetsInvalidUnit")
@@ -200,26 +208,18 @@ for x in range(0, 4096):
 values["expected"]["addConLongName"] = 400
 values["tests"]["addConLongName"] = {}
 
-data = {
-    "offsetName": name,
-    "offsetValue": 5,
-    "offsetUnit": "W"
-}
+data = {"offsetName": name, "offsetValue": 5, "offsetUnit": "W"}
 
 addOffset("addConLongName", data)
 values["status"]["addConLongName"] = getOffsets("getOffsetsLongName")
 
 # Test 9 - Add offset with characters which may potentially break settings.json file
-name = "Offset \":{},[],"
+name = 'Offset ":{},[],'
 
 values["expected"]["addConBadName"] = 400
 values["tests"]["addConBadName"] = {}
 
-data = {
-    "offsetName": name,
-    "offsetValue": 5,
-    "offsetUnit": "W"
-}
+data = {"offsetName": name, "offsetValue": 5, "offsetUnit": "W"}
 
 addOffset("addConBadName", data)
 values["status"]["addConBadName"] = getOffsets("getOffsetsBadName")
@@ -228,11 +228,7 @@ values["status"]["addConBadName"] = getOffsets("getOffsetsBadName")
 values["expected"]["addConNulName"] = 400
 values["tests"]["addConNulName"] = {}
 
-data = {
-    "offsetName": '',
-    "offsetValue": 5,
-    "offsetUnit": "W"
-}
+data = {"offsetName": "", "offsetValue": 5, "offsetUnit": "W"}
 
 addOffset("addConNulName", data)
 values["status"]["addConNulName"] = getOffsets("getOffsetsNulName")
@@ -242,32 +238,29 @@ values["status"]["addConNulName"] = getOffsets("getOffsetsNulName")
 values["expected"]["addConNulValue"] = 400
 values["tests"]["addConNulValue"] = {}
 
-data = {
-    "offsetName": "Null Value",
-    "offsetValue": '',
-    "offsetUnit": "W"
-}
+data = {"offsetName": "Null Value", "offsetValue": "", "offsetUnit": "W"}
 
 addOffset("addConNulValue", data)
 values["status"]["addConNulValue"] = getOffsets("getOffsetsNulValue")
 
 # Test 12 - Update all existing offsets (except Tests 7 or 8) by setting them all to 5A
-for offsetName in [ "First Amp Offset Positive", "Second Amp Offset Negative", 
-   "First Watt Offset Positive", "Second Watts Offset Negative" ]:
+for offsetName in [
+    "First Amp Offset Positive",
+    "Second Amp Offset Negative",
+    "First Watt Offset Positive",
+    "Second Watts Offset Negative",
+]:
     runname = "Update " + offsetName
 
     values["expected"][runname] = 204
     values["tests"][runname] = {}
 
-    data = {
-        "offsetName": offsetName,
-        "offsetValue": 5,
-        "offsetUnit": "A"
-    }
+    data = {"offsetName": offsetName, "offsetValue": 5, "offsetUnit": "A"}
 
     try:
-        response = session.post("http://127.0.0.1:8088/api/addConsumptionOffset",
-            json=data, timeout=30)
+        response = session.post(
+            "http://127.0.0.1:8088/api/addConsumptionOffset", json=data, timeout=30
+        )
         values["elapsed"][runname] = response.elapsed
         values["response"][runname] = response.status_code
     except requests.Timeout:
@@ -280,15 +273,14 @@ for offsetName in [ "First Amp Offset Positive", "Second Amp Offset Negative",
     values["status"][runname] = getOffsets("getOffsets" + runname)
 
 # Test 11 - Delete all configured consumption offsets
-offsets=getOffsets("DeleteAll")
+offsets = getOffsets("DeleteAll")
 for offset in offsets.keys():
-    data = {
-        "offsetName": offset
-    }
+    data = {"offsetName": offset}
 
     try:
-        response = session.post("http://127.0.0.1:8088/api/deleteConsumptionOffset",
-            json=data, timeout=30)
+        response = session.post(
+            "http://127.0.0.1:8088/api/deleteConsumptionOffset", json=data, timeout=30
+        )
     except requests.Timeout:
         print("Error: Connection Timed Out at deleteConsumption")
         values["tests"]["deleteConsumption"]["fail"] = 1
@@ -302,7 +294,14 @@ values["status"]["deleteConsumptionAfter"] = getOffsets("deleteConsumptionAfter"
 for reqs in values["expected"].keys():
     if values["response"].get(reqs, None):
         if values["response"][reqs] != values["expected"][reqs]:
-            print("Error: Response code " + str(values["response"][reqs]) + " for test " + str(reqs) + " does not equal expected result " + str(values["expected"][reqs]))
+            print(
+                "Error: Response code "
+                + str(values["response"][reqs])
+                + " for test "
+                + str(reqs)
+                + " does not equal expected result "
+                + str(values["expected"][reqs])
+            )
             values["tests"][reqs]["fail"] = 1
     else:
         print("No response was found for test " + str(reqs) + ", skipping")
@@ -310,7 +309,13 @@ for reqs in values["expected"].keys():
 # Check the request times and see if any exceeded the maximum set in maxRequest
 for reqs in values["elapsed"].keys():
     if values["elapsed"][reqs] > maxRequest:
-        print("Error: API request " + str(reqs) + " took longer than maximum duration " + str(maxRequest) + ". Failing test")
+        print(
+            "Error: API request "
+            + str(reqs)
+            + " took longer than maximum duration "
+            + str(maxRequest)
+            + ". Failing test"
+        )
         values["tests"][reqs]["fail"] = 1
 
 # Check the getConsumptionOffsets output of each test
@@ -320,7 +325,10 @@ if not values["tests"]["addConAmpsFirst"].get("fail", 0):
     values["tests"]["addConAmpsFirst"]["fail"] = 1
     for offsets in values["status"]["AmpsFirst"].keys():
         if offsets == "First Amp Offset Positive":
-            if values["status"]["AmpsFirst"][offsets]["value"] == values["target"]["ampsFirst"]:
+            if (
+                values["status"]["AmpsFirst"][offsets]["value"]
+                == values["target"]["ampsFirst"]
+            ):
                 if values["status"]["AmpsFirst"][offsets]["unit"] == "A":
                     values["tests"]["addConAmpsFirst"]["fail"] = 0
 
@@ -329,7 +337,10 @@ if not values["tests"]["addConAmpsSecond"].get("fail", 0):
     values["tests"]["addConAmpsSecond"]["fail"] = 1
     for offsets in values["status"]["AmpsSecond"].keys():
         if offsets == "Second Amp Offset Negative":
-            if values["status"]["AmpsSecond"][offsets]["value"] == values["target"]["ampsSecond"]:
+            if (
+                values["status"]["AmpsSecond"][offsets]["value"]
+                == values["target"]["ampsSecond"]
+            ):
                 if values["status"]["AmpsSecond"][offsets]["unit"] == "A":
                     values["tests"]["addConAmpsSecond"]["fail"] = 0
 
@@ -338,7 +349,10 @@ if not values["tests"]["addConWattsFirst"].get("fail", 0):
     values["tests"]["addConWattsFirst"]["fail"] = 1
     for offsets in values["status"]["WattsFirst"].keys():
         if offsets == "First Watt Offset Positive":
-            if values["status"]["WattsFirst"][offsets]["value"] == values["target"]["wattsFirst"]:
+            if (
+                values["status"]["WattsFirst"][offsets]["value"]
+                == values["target"]["wattsFirst"]
+            ):
                 if values["status"]["WattsFirst"][offsets]["unit"] == "W":
                     values["tests"]["addConWattsFirst"]["fail"] = 0
 
@@ -347,7 +361,10 @@ if not values["tests"]["addConWattsSecond"].get("fail", 0):
     values["tests"]["addConWattsSecond"]["fail"] = 1
     for offsets in values["status"]["WattsSecond"].keys():
         if offsets == "Second Watts Offset Negative":
-            if values["status"]["WattsSecond"][offsets]["value"] == values["target"]["wattsSecond"]:
+            if (
+                values["status"]["WattsSecond"][offsets]["value"]
+                == values["target"]["wattsSecond"]
+            ):
                 if values["status"]["WattsSecond"][offsets]["unit"] == "W":
                     values["tests"]["addConWattsSecond"]["fail"] = 0
 
@@ -361,7 +378,9 @@ for test in values["tests"].keys():
     if values["tests"][test].get("fail", 0):
         print("At least one test failed. Please review logs")
         if skipFailure:
-            print("Due to skipFailure being set, we will not fail the test suite pipeline on this test.")
+            print(
+                "Due to skipFailure being set, we will not fail the test suite pipeline on this test."
+            )
             exit(0)
         else:
             exit(255)

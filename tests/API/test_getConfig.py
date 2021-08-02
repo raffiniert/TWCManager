@@ -33,7 +33,7 @@ except requests.ConnectionError:
 jsonResp = None
 
 if response.status_code == 200:
-    while (not jsonResp and getAttempts < 3):
+    while not jsonResp and getAttempts < 3:
         getAttempts += 1
         try:
             jsonResp = response.json()
@@ -41,7 +41,9 @@ if response.status_code == 200:
             # On Python 3.4, JSON decoding failures raise ValueError
             print("Error: Unable to parse JSON output from getConfig()")
 
-            f = open("/tmp/twcmanager-tests/getConfig-json-"+str(getAttempts)+".txt", "w")
+            f = open(
+                "/tmp/twcmanager-tests/getConfig-json-" + str(getAttempts) + ".txt", "w"
+            )
             f.write("Exception: " + str(e))
             f.write("API Response: " + str(response.text))
             f.close()
@@ -51,12 +53,14 @@ if response.status_code == 200:
 
             # Log the incomplete JSON that we did get - I would like to know
             # why this would happen
-            f = open("/tmp/twcmanager-tests/getConfig-json-"+str(getAttempts)+".txt", "w")
+            f = open(
+                "/tmp/twcmanager-tests/getConfig-json-" + str(getAttempts) + ".txt", "w"
+            )
             f.write("Exception: " + str(e))
             f.write("API Response: " + str(response.text))
             f.close()
 
-        if (getAttempts == 2):
+        if getAttempts == 2:
             # Too many failures
             # Fail tests
             exit(255)
@@ -66,7 +70,7 @@ else:
 
 success = 1
 if jsonResp:
-    if not jsonResp.get("interface",{}).get("Dummy",{}).get("enabled",None):
+    if not jsonResp.get("interface", {}).get("Dummy", {}).get("enabled", None):
         print("Missing interface configuration")
         success = 0
     if not jsonResp.get("config", None):
@@ -88,7 +92,9 @@ if success:
 else:
     print("At least one test failed. Please review logs")
     if skipFailure:
-        print("Due to skipFailure being set, we will not fail the test suite pipeline on this test.")
+        print(
+            "Due to skipFailure being set, we will not fail the test suite pipeline on this test."
+        )
         exit(0)
     else:
         exit(255)

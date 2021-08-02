@@ -29,7 +29,7 @@ setup(
         "sysv_ipc >= 1.0.1; python_version >= '3.6'",
         "termcolor>=1.1.0",
         "websockets; python_version >= '3.6' and platform_machine != 'armv7l'",
-        "ww>=0.2.1"
+        "ww>=0.2.1",
     ],
     # Package Metadata
     author="Nathan Gardiner",

@@ -6,7 +6,7 @@ import requests
 session = requests.Session()
 session.trust_env = False
 
-#b'{"4142": {"lastAmpsOffered": 0, "lastHeartbeat": 0.68, "state": 0, "TWCID": "4142", "voltsPhaseC": 0, "reportedAmpsActual": 0.0, "lastVIN": "", "maxAmps": 80.0, "lifetimekWh": 0, "version": 2, "currentVIN": "", "voltsPhaseA": 0, "voltsPhaseB": 0}, "total": {"lifetimekWh": 0, "reportedAmpsActual": 0.0, "TWCID": "total", "maxAmps": 80.0, "lastAmpsOffered": 0}}'
+# b'{"4142": {"lastAmpsOffered": 0, "lastHeartbeat": 0.68, "state": 0, "TWCID": "4142", "voltsPhaseC": 0, "reportedAmpsActual": 0.0, "lastVIN": "", "maxAmps": 80.0, "lifetimekWh": 0, "version": 2, "currentVIN": "", "voltsPhaseA": 0, "voltsPhaseB": 0}, "total": {"lifetimekWh": 0, "reportedAmpsActual": 0.0, "TWCID": "total", "maxAmps": 80.0, "lastAmpsOffered": 0}}'
 # Todo Tests:
 #    Send specific lifetime kWh message and compare values
 

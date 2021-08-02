@@ -34,7 +34,9 @@ if success:
 else:
     print("At least one test failed. Please review logs")
     if skipFailure:
-        print("Due to skipFailure being set, we will not fail the test suite pipeline on this test.")
+        print(
+            "Due to skipFailure being set, we will not fail the test suite pipeline on this test."
+        )
         exit(0)
     else:
         exit(255)

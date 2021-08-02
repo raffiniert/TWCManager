@@ -1117,7 +1117,9 @@ class TeslaAPI:
 
     def getMFADevices(self, transaction_id):
         # Requests a list of devices we can use for MFA
-        url = f("https://auth.tesla.com/oauth2/v3/authorize/mfa/factors?transaction_id={transaction_id}")
+        url = f(
+            "https://auth.tesla.com/oauth2/v3/authorize/mfa/factors?transaction_id={transaction_id}"
+        )
         resp = self.session.get(url)
         try:
             content = json.loads(resp.text)
@@ -1129,15 +1131,22 @@ class TeslaAPI:
         if resp.status_code == 200:
             return content["data"]
         elif resp.status_code == 400:
-            logger.error("The following error was returned when attempting to fetch MFA devices for Tesla Login:" + str(content.get("error", "")))
+            logger.error(
+                "The following error was returned when attempting to fetch MFA devices for Tesla Login:"
+                + str(content.get("error", ""))
+            )
         else:
-            logger.error("An unexpected error code (" + str(resp.status) + ") was returned when attempting to fetch MFA devices for Tesla Login")
+            logger.error(
+                "An unexpected error code ("
+                + str(resp.status)
+                + ") was returned when attempting to fetch MFA devices for Tesla Login"
+            )
 
     def mfaLogin(self, transactionID, mfaDevice, mfaCode):
         data = {
-            "transaction_id": transactionID, 
-            "factor_id": mfaDevice, 
-            "passcode": str(mfaCode).rjust(6, '0')
+            "transaction_id": transactionID,
+            "factor_id": mfaDevice,
+            "passcode": str(mfaCode).rjust(6, "0"),
         }
         url = "https://auth.tesla.com/oauth2/v3/authorize/mfa/verify"
         resp = self.session.post(url, json=data)
@@ -1149,8 +1158,16 @@ class TeslaAPI:
         except json.decoder.JSONDecodeError:
             return False
 
-        if "error" in resp.text or not jsonData.get("data", None) or not jsonData["data"].get("approved", None) or not jsonData["data"].get("valid", None):
-            if jsonData.get("error", {}).get("message", None) == "Invalid Attributes: Your passcode should be six digits.":
+        if (
+            "error" in resp.text
+            or not jsonData.get("data", None)
+            or not jsonData["data"].get("approved", None)
+            or not jsonData["data"].get("valid", None)
+        ):
+            if (
+                jsonData.get("error", {}).get("message", None)
+                == "Invalid Attributes: Your passcode should be six digits."
+            ):
                 return "TokenLengthError"
             else:
                 return "TokenFail"

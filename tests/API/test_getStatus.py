@@ -6,7 +6,7 @@ import requests
 session = requests.Session()
 session.trust_env = False
 
-#b'{"scheduledChargingStartHour": -1, "consumptionAmps": "0.00", "isGreenPolicy": "No", "scheduledChargingFlexStart": -1, "chargerLoadWatts": "0.00", "currentPolicy": "Non Scheduled Charging", "generationWatts": "0.00", "carsCharging": 0, "scheduledChargingEndHour": -1, "maxAmpsToDivideAmongSlaves": "0.00", "consumptionWatts": "0.00", "ScheduledCharging": {"tuesday": true, "monday": true, "flexStartingMinute": -1, "flexSaturday": true, "flexFriday": true, "saturday": true, "wednesday": true, "flexTuesday": true, "thursday": true, "flexWednesday": true, "flexSunday": true, "flexBatterySize": 100, "amps": 0, "flexEndingMinute": -1, "sunday": true, "flexThursday": true, "flexStartEnabled": 0, "enabled": false, "endingMinute": -1, "flexMonday": true, "friday": true, "startingMinute": -1}, "generationAmps": "0.00"}'
+# b'{"scheduledChargingStartHour": -1, "consumptionAmps": "0.00", "isGreenPolicy": "No", "scheduledChargingFlexStart": -1, "chargerLoadWatts": "0.00", "currentPolicy": "Non Scheduled Charging", "generationWatts": "0.00", "carsCharging": 0, "scheduledChargingEndHour": -1, "maxAmpsToDivideAmongSlaves": "0.00", "consumptionWatts": "0.00", "ScheduledCharging": {"tuesday": true, "monday": true, "flexStartingMinute": -1, "flexSaturday": true, "flexFriday": true, "saturday": true, "wednesday": true, "flexTuesday": true, "thursday": true, "flexWednesday": true, "flexSunday": true, "flexBatterySize": 100, "amps": 0, "flexEndingMinute": -1, "sunday": true, "flexThursday": true, "flexStartEnabled": 0, "enabled": false, "endingMinute": -1, "flexMonday": true, "friday": true, "startingMinute": -1}, "generationAmps": "0.00"}'
 
 response = None
 
