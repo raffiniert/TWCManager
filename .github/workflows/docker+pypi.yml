@@ -11,7 +11,8 @@ on:
 jobs:
   pypi-dev:
     name: Build a PyPi Package if this is a commit to the ci_dev branch
-    runs-on: [ "self-hosted", "build_host" ]
+    #runs-on: [ "self-hosted", "build_host" ]
+    runs-on: ubuntu-latest
 
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci_dev')
 
@@ -19,10 +20,10 @@ jobs:
     - name: Check out Repository
       uses: actions/checkout@v2
 
-#    - name: Set up Python 3.7
-#      uses: actions/setup-python@v1
-#      with:
-#        python-version: 3.7
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
 
     - name: Install pypa/build
       run: >-
