@@ -11,8 +11,7 @@ on:
 jobs:
   pypi-dev:
     name: Build a PyPi Package if this is a commit to the ci_dev branch
-    #runs-on: [ "self-hosted", "build_host" ]
-    runs-on: ubuntu-latest
+    runs-on: [ "self-hosted", "build_host" ]
 
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci_dev')
 
