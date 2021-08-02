@@ -24,8 +24,7 @@ jobs:
       with:
         python-version: 3.7
 
-    - name: Obtain current commit hash
-      id: vars
+    - name: Install libffi-dev package
       shell: bash
       run: |
         apt-get clean
