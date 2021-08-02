@@ -24,6 +24,14 @@ jobs:
       with:
         python-version: 3.7
 
+    - name: Obtain current commit hash
+      id: vars
+      shell: bash
+      run: |
+        apt-get clean
+        apt-get -y update
+        apt-get -y install libffi-dev
+
     - name: Install pypa/build
       run: >-
         python -m
@@ -133,7 +141,7 @@ jobs:
 #        platforms: linux/amd64,linux/arm64,linux/arm/v7
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: twcmanager/twcmanager:latest
+        tags: twcmanager/twcmanager-testing:latest
         build-args: |
           http_proxy=http://192.0.2.1:3128
           https_proxy=http://192.0.2.1:3128
