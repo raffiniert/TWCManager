@@ -171,7 +171,6 @@ class Fronius:
                     self.generatedW2 = meterData2["Body"]["Data"]["Site"]["P_PV"]
                     logger.info(
                         "generatedW2",
-                        self.generatedW2,
                         self.generatedW2
                     )
                 except (KeyError, TypeError) as e:
