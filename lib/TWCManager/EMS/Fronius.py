@@ -154,7 +154,7 @@ class Fronius:
                     self.akku = meterData["Body"]["Data"]["Site"]["P_Akku"]
                     logger.info(
                         "generatedW",
-                        str(self.generatedW)
+                        self.generatedW
                     )
                 except (KeyError, TypeError) as e:
                     self.generatedW = 0
@@ -172,7 +172,7 @@ class Fronius:
                     logger.info(
                         "generatedW2",
                         self.generatedW2,
-                        str(self.generatedW2)
+                        self.generatedW2
                     )
                 except (KeyError, TypeError) as e:
                     self.generatedW2 = 0
