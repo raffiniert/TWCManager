@@ -152,6 +152,11 @@ class Fronius:
                 try:
                     self.generatedW = meterData["Body"]["Data"]["Site"]["P_PV"]
                     self.akku = meterData["Body"]["Data"]["Site"]["P_Akku"]
+                    logger.info(
+                        "generatedW",
+                        self.generatedW,
+                        extra={"colored": "red"},
+                    )
                 except (KeyError, TypeError) as e:
                     self.generatedW = 0
                     self.akku = 0
@@ -165,6 +170,11 @@ class Fronius:
             if meterData2:
                 try:
                     self.generatedW2 = meterData2["Body"]["Data"]["Site"]["P_PV"]
+                    logger.info(
+                        "generatedW2",
+                        self.generatedW2,
+                        extra={"colored": "red"},
+                    )
                 except (KeyError, TypeError) as e:
                     self.generatedW2 = 0
                     logger.log(
