@@ -152,10 +152,6 @@ class Fronius:
                 try:
                     self.generatedW = meterData["Body"]["Data"]["Site"]["P_PV"]
                     self.akku = meterData["Body"]["Data"]["Site"]["P_Akku"]
-                    logger.info(
-                        "generatedW",
-                        self.generatedW
-                    )
                 except (KeyError, TypeError) as e:
                     self.generatedW = 0
                     self.akku = 0
@@ -164,15 +160,15 @@ class Fronius:
                         "Exception during parsing Meter Data (Generation)",
                     )
                     logger.debug(e)
+                logger.info(
+                    "generatedW",
+                    self.generatedW
+                )
 
             meterData2 = self.getMeterData(self.serverIP2, self.serverPort2, False)
             if meterData2:
                 try:
                     self.generatedW2 = meterData2["Body"]["Data"]["Site"]["P_PV"]
-                    logger.info(
-                        "generatedW2",
-                        self.generatedW2
-                    )
                 except (KeyError, TypeError) as e:
                     self.generatedW2 = 0
                     logger.log(
@@ -180,6 +176,10 @@ class Fronius:
                         "Exception during parsing Meter Data 2 (Generation)",
                     )
                     logger.debug(e)
+                logger.info(
+                    "generatedW2",
+                    self.generatedW2
+                )
 
             smartMeterData = self.getSmartMeterData()
             if smartMeterData:
