@@ -469,8 +469,8 @@
         },
         "Fronius": {
             "enabled": true,
-            "serverIP": "10.0.1.7",
-            "serverIP2": "10.0.1.4"
+            "serverIP": "192.168.1.10",
+            "serverIP2": "192.168.1.8"
         },
         # Growatt: Uses a Growatt pypi package to very easily pull the data
         # useBatteyAt describes at whihc SOC the system will add the battery's maxOutput to the pool of available power
