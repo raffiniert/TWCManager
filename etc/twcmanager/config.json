@@ -170,7 +170,7 @@
         # DEBUG     10       10     all info.
         # DEBUG2     9       11     more than all info.  ;)
 
-        "logLevel": 30,
+        "logLevel": 20,
 
         # Choose whether to display milliseconds after time on each line of debug info.
         "displayMilliseconds": false,
